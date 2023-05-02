@@ -84,7 +84,9 @@ VillageState.random = function(parcelCount = 5) {
     return new VillageState("Post Office", parcels);
 }
 
-runRobot(VillageState.random(), randomRobot)
+let randomState = VillageState.random();
+
+runRobot(randomState, randomRobot)
 
 var mailRoute = [
     "Alice's House", "Cabin", "Alice's House", "Bob's House",
@@ -100,7 +102,7 @@ var mailRoute = [
     return {direction: memory[0], memory: memory.slice(1)};
   }
   
-  runRobot(VillageState.random(), routeRobot)
+  runRobot(randomState, routeRobot)
 
   function findRoute(graph, from, to) {
     let work = [{at: from, route: []}];
@@ -116,7 +118,7 @@ var mailRoute = [
   }
 
 
-function goalOrientedRobot({place, parcels}, route) {
+function goalOrientedRobot({place, parcels}, route = []) {
     if (route.length == 0) {
       let parcel = parcels[0];
       if (parcel.place != place) {
@@ -127,3 +129,5 @@ function goalOrientedRobot({place, parcels}, route) {
     }
     return {direction: route[0], memory: route.slice(1)};
   }
+
+  runRobot(randomState, goalOrientedRobot)
