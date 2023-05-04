@@ -117,6 +117,7 @@ function findRoute(graph, from, to) {
 }
 
 
+
 function goalOrientedRobot({place, parcels}, route = []) {
     if (route.length == 0) {
       let parcel = parcels[0];
@@ -172,4 +173,27 @@ function countRobot(state, robot, memory) {
     }
 }
   
-compareRobots(routeRobot, [], goalOrientedRobot, []);
+/*
+    As a second exercise, I was supposed to make the goalOrientedRobot more efficient. The most obvious thing that I noticed 
+    about the robot was that it went straight for the first parcel created by th VillageState.random() function, so simply I
+    made the robot sort the parcels array so the nearest parcel is on the top of the list. The robot is faster by about 1.5
+    steps, as per compareRobots function.
+*/
+
+function newRobot({place, parcels}, route = []) {
+    if (route.length == 0) {
+        parcels.sort((a, b) => findRoute(roadGraph, place, a.place).length - findRoute(roadGraph, place, b.place).length)
+
+        let parcel = parcels[0];
+
+        if (parcel.place != place) {
+            route = findRoute(roadGraph, place, parcel.place);
+        } else {
+            route = findRoute(roadGraph, place, parcel.address);
+        }
+    }
+    return {direction: route[0], memory: route.slice(1)};
+}
+
+
+compareRobots(newRobot, [], goalOrientedRobot, []);
